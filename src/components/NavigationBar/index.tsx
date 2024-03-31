@@ -13,7 +13,7 @@ import { SearchBar } from "@/features/search";
 
 export default function NavigationBar() {
   return (
-    <Navbar>
+    <Navbar maxWidth="xl">
       <NavbarBrand className="flex gap-2">
         <TeamerLogo />
         <h1 className="font-bold text-inherit">{LOGO_TITLE}</h1>
