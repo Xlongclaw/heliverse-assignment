@@ -6,8 +6,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Team Selector",
-  description: "React Project that let users interact with other user and lets user create a team of users",
-  creator:"Madhuresh Verma",
+  description:
+    "React Project that let users interact with other user and lets user create a team of users",
+  creator: "Madhuresh Verma",
 };
 
 export default function RootLayout({
@@ -16,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className={inter.className}>{children}</body>
     </html>
   );

@@ -1,9 +1,12 @@
-import React from 'react'
+"use client";
+import NavigationBar from "@/components/NavigationBar";
+import { NextUIProvider } from "@nextui-org/react";
+import React from "react";
 
 export default function Page() {
   return (
-    <div>
-      <h5>HELLO</h5>
-    </div>
-  )
+    <NextUIProvider>
+      <NavigationBar/>
+    </NextUIProvider>
+  );
 }
