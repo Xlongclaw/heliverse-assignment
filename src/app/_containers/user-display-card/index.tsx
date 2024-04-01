@@ -15,13 +15,23 @@ interface IProps {
 
 export default function UserDisplayCard({ user }: IProps) {
   const [selected, setSelected] = React.useState(false);
-  return (
+return (
     <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      layout
+      whileInView={{
+        opacity: 1,
+      }}
+      whileTap={{
+        scale:0.9
+      }}
       onClick={() => setSelected((value) => !value)}
       className={classnames(
-        "bg-zinc-950 rounded-lg p-4 border-2 border-zinc-900 hover:border-primary-400 cursor-pointer transition-all",
+        "bg-zinc-950 rounded-lg p-4 border border-zinc-900 hover:bg-zinc-900 cursor-pointer transition-all opacity-0",
         {
-          "border-primary-400": selected,
+          "border-primary-400 hidden w-0": selected,
         }
       )}
     >
@@ -30,6 +40,7 @@ export default function UserDisplayCard({ user }: IProps) {
         email={user.email}
         first_name={user.first_name}
         last_name={user.last_name}
+        avatar={user.avatar}
       />
       <div className="flex justify-between">
         <UserDomain domain={user.domain} />

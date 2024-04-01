@@ -6,6 +6,7 @@ interface IProps {
   first_name: string;
   last_name: string;
   email: string;
+  avatar:string
 }
 
 export default function UserProfileSection(props: IProps) {
@@ -19,10 +20,10 @@ export default function UserProfileSection(props: IProps) {
           src={"https://i.pravatar.cc/150?u=a04258114e29026708c"}
         /> */}
       <Avatar
-        src={"https://i.pravatar.cc/150?u=a04258114e29026708c"}
+        src={props.avatar}
         radius="md"
         size="sm"
-        color={props.available ? "primary" : "warning"}
+        color={props.available ? "primary" : "default"}
         isBordered
       />
       <div className="">

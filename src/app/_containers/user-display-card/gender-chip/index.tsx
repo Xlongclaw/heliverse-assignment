@@ -8,15 +8,15 @@ interface IProps {
 export default function GenderChip({ gender }: IProps) {
   return (
     <Chip
-      variant={"flat"}
+      variant={"bordered"}
       size="sm"
-      color={
-        gender === "Male"
-          ? "success"
-          : gender === "Female"
-          ? "danger"
-          : "warning"
-      }
+      // color={
+      //   gender === "Male"
+      //     ? "success"
+      //     : gender === "Female"
+      //     ? "danger"
+      //     : "warning"
+      // }
     >
       {gender}
     </Chip>
