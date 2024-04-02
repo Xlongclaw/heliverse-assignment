@@ -12,15 +12,11 @@ interface IProps {
 }
 
 export default function UserDisplayCard({ user }: IProps) {
-  const [selected, setSelected] = React.useState(false);
-
-  const { addMember, removeMember, checkForDomain } =
+  const { addMember, removeMember, checkForDomain, isMember } =
     React.useContext(UsersContext);
+  const [selected, setSelected] = React.useState(isMember(user.id));
 
-  React.useEffect(() => {
-    if (selected) addMember(user.id, user.domain);
-    else removeMember(user.id, user.domain);
-  }, [selected]);
+  React.useEffect(() => {}, [selected]);
 
   return (
     <motion.div
@@ -37,8 +33,14 @@ export default function UserDisplayCard({ user }: IProps) {
       onClick={() => {
         if (!selected) {
           const alreadyPresent = checkForDomain(user.domain);
-          if (!alreadyPresent) setSelected(true);
-        } else setSelected(false);
+          if (!alreadyPresent) {
+            addMember(user.id, user.domain);
+            setSelected(true);
+          }
+        } else {
+          removeMember(user.id, user.domain);
+          setSelected(false);
+        }
       }}
       className={classnames(
         "bg-zinc-950 rounded-lg p-4 border-2 border-zinc-900 hover:bg-zinc-900 cursor-pointer opacity-0",

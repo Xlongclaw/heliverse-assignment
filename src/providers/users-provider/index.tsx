@@ -12,6 +12,7 @@ interface IUsersContext {
   addMember: (id: number, domain: string) => void;
   removeMember: (id: number, domain: string) => void;
   checkForDomain: (domain: string) => boolean;
+  isMember: (id: number) => boolean;
   pageCount: number;
   teamMembers: Array<number>;
 }
@@ -34,6 +35,7 @@ export const UsersContext = React.createContext<IUsersContext>({
   addMember: () => {},
   removeMember: () => {},
   checkForDomain:()=>false,
+  isMember:()=>false,
   teamMembers: [],
   pageCount: 0,
 });
@@ -60,6 +62,12 @@ export default function UsersProvider({ children }: IProps) {
     );
     setDomains(filteredDomains);
   };
+
+  const isMember = (id:number) =>{
+    const arr = teamMembers.filter((member)=>member === id)
+    if(arr.length === 0) return false
+   return true
+  }
 
   const checkForDomain = (domain:string) =>{
     const arr = domains.filter((selectedDomain)=>selectedDomain.toLowerCase() === domain.toLowerCase())
@@ -88,7 +96,8 @@ export default function UsersProvider({ children }: IProps) {
         addMember,
         removeMember,
         teamMembers,
-        checkForDomain
+        checkForDomain,
+        isMember
       }}
     >
       {children}
