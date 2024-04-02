@@ -1,1 +1,1 @@
-export const SERVER_URL = "https://x-teamer-server.vercel.app"
+export const SERVER_URL = "https://x-teamer-server.onrender.com"

@@ -1,30 +1,25 @@
 import { UserType } from "@/types";
-import { Avatar, Card, Chip } from "@nextui-org/react";
 import classnames from "classnames";
-import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
-import DomainIcon from "./user-domain/DomainIcon";
 import GenderChip from "./gender-chip";
 import UserDomain from "./user-domain";
 import UserProfileSection from "./user-profile-section";
+import { UsersContext } from "@/providers/users-provider";
 
 interface IProps {
   user: UserType;
-  removeMember: (id: number) => void;
-  addMember: (is: number) => void;
 }
 
-export default function UserDisplayCard({
-  user,
-  addMember,
-  removeMember,
-}: IProps) {
+export default function UserDisplayCard({ user }: IProps) {
   const [selected, setSelected] = React.useState(false);
 
+  const { addMember, removeMember, checkForDomain } =
+    React.useContext(UsersContext);
+
   React.useEffect(() => {
-    if (selected) addMember(user.id);
-    else removeMember(user.id);
+    if (selected) addMember(user.id, user.domain);
+    else removeMember(user.id, user.domain);
   }, [selected]);
 
   return (
@@ -37,13 +32,19 @@ export default function UserDisplayCard({
         opacity: 1,
       }}
       whileTap={{
-        scale: 0.9,
+        scale: !checkForDomain(user.domain) ? 0.95 : 1,
       }}
-      onClick={() => setSelected((value) => !value)}
+      onClick={() => {
+        if (!selected) {
+          const alreadyPresent = checkForDomain(user.domain);
+          if (!alreadyPresent) setSelected(true);
+        } else setSelected(false);
+      }}
       className={classnames(
-        "bg-zinc-950 rounded-lg p-4 border border-zinc-900 hover:bg-zinc-900 cursor-pointer transition-all opacity-0",
+        "bg-zinc-950 rounded-lg p-4 border-2 border-zinc-900 hover:bg-zinc-900 cursor-pointer opacity-0",
         {
-          "border-primary-300 ": selected,
+          "border-primary-400 ": selected,
+          "bg-zinc-900 ": checkForDomain(user.domain),
         }
       )}
     >
