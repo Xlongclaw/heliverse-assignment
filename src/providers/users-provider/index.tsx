@@ -1,4 +1,4 @@
-// import { usersData } from "@/constants";
+import { SERVER_URL } from "@/constants";
 import { UserType } from "@/types";
 import React from "react";
 
@@ -13,7 +13,7 @@ interface IUsersContext {
 }
 
 const fetchUsers = async (page: number) => {
-  const res = await fetch(`http://localhost:8080/api/users?page=${page}`);
+  const res = await fetch(`${SERVER_URL}/api/users?page=${page}`);
   const data = await res.json();
   return { users: data.users, count: data.count };
 };
