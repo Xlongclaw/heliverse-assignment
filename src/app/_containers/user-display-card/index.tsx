@@ -11,11 +11,23 @@ import UserProfileSection from "./user-profile-section";
 
 interface IProps {
   user: UserType;
+  removeMember: (id: number) => void;
+  addMember: (is: number) => void;
 }
 
-export default function UserDisplayCard({ user }: IProps) {
+export default function UserDisplayCard({
+  user,
+  addMember,
+  removeMember,
+}: IProps) {
   const [selected, setSelected] = React.useState(false);
-return (
+
+  React.useEffect(() => {
+    if (selected) addMember(user.id);
+    else removeMember(user.id);
+  }, [selected]);
+
+  return (
     <motion.div
       initial={{
         opacity: 0,
@@ -25,13 +37,13 @@ return (
         opacity: 1,
       }}
       whileTap={{
-        scale:0.9
+        scale: 0.9,
       }}
       onClick={() => setSelected((value) => !value)}
       className={classnames(
         "bg-zinc-950 rounded-lg p-4 border border-zinc-900 hover:bg-zinc-900 cursor-pointer transition-all opacity-0",
         {
-          "border-primary-400 hidden w-0": selected,
+          "border-primary-300 ": selected,
         }
       )}
     >
