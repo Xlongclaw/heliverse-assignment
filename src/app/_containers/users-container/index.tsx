@@ -9,7 +9,6 @@ export default function UsersContainer() {
   const { users, changePage, pageCount } = React.useContext(UsersContext);
   
   React.useEffect(() => {
-    console.log(currentPage);
     changePage(currentPage);
   }, [currentPage]);
   

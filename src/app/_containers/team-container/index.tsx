@@ -3,6 +3,7 @@ import { UsersContext } from "@/providers/users-provider";
 import { UserType } from "@/types";
 import React from "react";
 import UserDisplayCard from "../user-display-card";
+import cn from "@/utils/cn";
 
 export default function TeamContainer() {
   const { teams } = React.useContext(TeamsContext);
@@ -10,34 +11,41 @@ export default function TeamContainer() {
   const [selectedTeam, setSelectedTeam] = React.useState<{
     teamName: string;
     members: Array<number>;
-  }>();
+  }>(teams[0]);
   const [currentTeamMembers, setCurrentTeamMembers] = React.useState<
     Array<UserType>
   >([]);
 
   React.useEffect(() => {
-    console.log(selectedTeam);
-    
     setCurrentTeamMembers([]);
     selectedTeam?.members.forEach((memberId, i) => {
       fetchUserById!(memberId).then((user) => {
-        console.log(user);
-        
-        setCurrentTeamMembers((teamMembers)=>[...teamMembers, user]);
+        setCurrentTeamMembers((teamMembers) => [...teamMembers, user]);
       });
     });
   }, [selectedTeam]);
 
   return (
-    <div className="flex my-4 gap-4">
-      <div className="bg-zinc-950 flex flex-col gap-3 rounded-2xl p-4 w-[18.4rem]">
+    <div className="flex  flex-col sm:flex-row my-4 gap-4 w-full">
+      <div className="bg-zinc-950 flex flex-col gap-3 rounded-2xl p-4 sm:w-[18.4rem]">
         {teams.map((team) => (
-          <button className="py-3 border bg-primary-400 hover:bg-primary-300" onClick={() => setSelectedTeam(team)}>{team.teamName}</button>
+          <button
+            key={team.teamName}
+            className={cn("py-3 rounded-xl bg-zinc-900 hover:bg-primary-300", {
+              "bg-primary-300": selectedTeam.teamName === team.teamName,
+            })}
+            onClick={() => setSelectedTeam(team)}
+          >
+            {team.teamName}
+          </button>
         ))}
       </div>
-      <div className="flex-1 h-[40rem] bg-zinc-950 rounded-2xl">
-        {currentTeamMembers.map((user) => (
-          <UserDisplayCard user={user}/>
+      <div className="flex-1 min-h-[40rem] bg-zinc-950 rounded-2xl">
+        {currentTeamMembers.map((user, i) => (
+          <UserDisplayCard
+            key={`${user.first_name}_${i}_ ${user.email}`}
+            user={user}
+          />
         ))}
       </div>
     </div>

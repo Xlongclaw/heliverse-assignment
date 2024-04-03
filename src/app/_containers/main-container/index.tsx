@@ -7,7 +7,7 @@ export default function MainContainer() {
   const [selected, setSelected] = React.useState<any>("CREATE_TEAM");
   return (
     <div className="relative flex justify-center ">
-      <div className=" w-[80rem] gap-16 p-4 rounded-2xl">
+      <div className=" w-[80rem] gap-4 pt-4 rounded-2xl flex flex-col items-center sm:items-start">
         <TabBar selected={selected} setSelected={setSelected} />
         {selected === "CREATE_TEAM" ? (
           <CreateTeamContainer />

@@ -11,7 +11,7 @@ export default function ActionStrip({ onCreateButtonPressed }: IProps) {
   const { teamMembers, changeFilterData, resetMembers } =
     React.useContext(UsersContext);
   return (
-    <div className=" py-4 flex items-center gap-4 justify-between flex-wrap">
+    <div className=" pb-4 flex items-center gap-4 justify-between flex-wrap">
       <div className="flex gap-4 flex-wrap">
         <Chip size="lg" color="default">
           Selected Users : {teamMembers.length}

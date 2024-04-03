@@ -54,10 +54,6 @@ export default function UsersProvider({ children }: IProps) {
   const [domains, setDomains] = React.useState<Array<string>>([]);
   const [filterOptions, setFilterOption] = React.useState({});
 
-  React.useEffect(() => {
-    console.log(filterOptions);
-  }, [filterOptions]);
-
   const addMember = (id: number, domain: string) => {
     setTeamMembers((members) => {
       return [...members, id];
@@ -84,7 +80,6 @@ export default function UsersProvider({ children }: IProps) {
     const arr = domains.filter(
       (selectedDomain) => selectedDomain.toLowerCase() === domain.toLowerCase()
     );
-    console.log(arr);
     if (arr.length === 0) return false;
     return true;
   };
@@ -96,7 +91,6 @@ export default function UsersProvider({ children }: IProps) {
   const changeFilterData = (data: any) => {
     const filterData = { ...filterOptions, ...data };
     setFilterOption(filterData);
-    console.log(data);
   };
 
   const fetchUserById = async (id: number) => {

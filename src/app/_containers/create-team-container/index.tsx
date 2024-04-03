@@ -2,6 +2,7 @@ import React from "react";
 import ActionStrip from "../action-strip";
 import UsersContainer from "../users-container";
 import CreateTeamModal from "./create-team-modal";
+import { SearchBar } from "@/features/search";
 
 export default function CreateTeamContainer() {
   const [modalVisibility, setModalVisibility] = React.useState(false);
@@ -14,7 +15,8 @@ export default function CreateTeamContainer() {
     setModalVisibility(false);
   };
   return (
-    <div className="relative">
+    <div className="relative w-full">
+      <div className="sm:hidden flex justify-center"><SearchBar/></div>
       <ActionStrip
         onCreateButtonPressed={() => {
           openModal();
