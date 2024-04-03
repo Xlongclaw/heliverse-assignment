@@ -4,15 +4,18 @@ import { NextUIProvider } from "@nextui-org/react";
 import React from "react";
 import MainContainer from "./_containers/main-container";
 import NavigationBar from "@/components/NavigationBar";
+import TeamsProvider from "@/providers/teams-provider";
 
 export default function Page() {
   return (
     <NextUIProvider>
       <UsersProvider>
-        <>
-          <NavigationBar />
-          <MainContainer />
-        </>
+        <TeamsProvider>
+          <>
+            <NavigationBar />
+            <MainContainer />
+          </>
+        </TeamsProvider>
       </UsersProvider>
     </NextUIProvider>
   );

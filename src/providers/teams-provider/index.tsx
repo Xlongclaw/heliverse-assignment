@@ -7,7 +7,7 @@ interface IProps {
 
 interface ITeamsContext {
   teams: Array<ITeam>;
-  postTeam: (data: Array<{ teamName: string; members: Array<number> }>) => void;
+  postTeam: (data: { teamName: string; members: Array<number> }) => void;
 }
 
 interface ITeam {
@@ -21,7 +21,10 @@ const fetchAllTeams = async () => {
   return data.teams;
 };
 
-export const TeamsContext = React.createContext<ITeamsContext | null>(null);
+export const TeamsContext = React.createContext<ITeamsContext>({
+  postTeam: () => {},
+  teams: [],
+});
 
 export default function TeamsProvider({ children }: IProps) {
   const [teams, setTeams] = React.useState<Array<ITeam>>();
@@ -31,14 +34,14 @@ export default function TeamsProvider({ children }: IProps) {
   }, []);
 
   const postTeam = (
-    data: Array<{ teamName: string; members: Array<number> }>
+    data: { teamName: string; members: Array<number> }
   ) => {
     fetch(`${SERVER_URL}/api/team`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({team:data}),
     });
   };
 
