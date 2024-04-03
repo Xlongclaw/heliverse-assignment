@@ -8,7 +8,12 @@
 
 Welcome to the Heliverse Internship Assignment project! This application is built using Next.js, React, TypeScript, Tailwind CSS, and Next UI. It is designed to fulfill the requirements of the internship assignment provided by Heliverse. Below are the key functionalities of the application:
 
-## Features
+### Project Images:
+
+![X-Teamer](https://res.cloudinary.com/dlxpf7d8c/image/upload/v1712185451/Project%20Images/eoc6xjcaqhwyqd9lkg8t.png)
+
+
+### Features
 
 1. **Display Users in Cards Format with Pagination**: Users are displayed in visually appealing card format with pagination. Each page displays 20 users.
 
@@ -21,7 +26,3 @@ Welcome to the Heliverse Internship Assignment project! This application is buil
 5. **Show Team Details**: Once the team is created, the application displays the details of the team, including the selected users' information.
 
 6. **Responsive Design**: The application is responsive and displays properly on different screen sizes.
-
-## Project Images:
-
-![X-Teamer](https://res.cloudinary.com/dlxpf7d8c/image/upload/v1712185044/Project%20Images/jaurpwrwkbv2siizp53g.png)
