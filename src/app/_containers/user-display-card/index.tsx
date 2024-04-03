@@ -6,6 +6,7 @@ import GenderChip from "./gender-chip";
 import UserDomain from "./user-domain";
 import UserProfileSection from "./user-profile-section";
 import { UsersContext } from "@/providers/users-provider";
+import { Button } from "@nextui-org/react";
 
 interface IProps {
   user: UserType;
@@ -37,16 +38,14 @@ export default function UserDisplayCard({ user }: IProps) {
             addMember(user.id, user.domain);
             setSelected(true);
           }
-        } else {
-          removeMember(user.id, user.domain);
-          setSelected(false);
         }
       }}
       className={classnames(
-        "bg-zinc-950 rounded-lg p-4 border-2 border-zinc-900 hover:bg-zinc-900 cursor-pointer opacity-0",
+        "bg-zinc-950 rounded-lg p-4 border-2 border-zinc-900 relative  cursor-pointer opacity-0",
         {
-          "border-primary-400 ": selected,
-          "bg-zinc-900 ": checkForDomain(user.domain),
+          "border-sky-600 ": selected,
+          "bg-zinc-800 ": checkForDomain(user.domain),
+          "hover:bg-zinc-900": !checkForDomain(user.domain),
         }
       )}
     >
@@ -57,6 +56,25 @@ export default function UserDisplayCard({ user }: IProps) {
         last_name={user.last_name}
         avatar={user.avatar}
       />
+      {selected && (
+        <Button
+          onClick={() => {
+            setSelected(false);
+            removeMember(user.id, user.domain);
+          }}
+          className="absolute right-1 top-1"
+          color="danger"
+          size="sm"
+        >
+          X
+        </Button>
+        // <div
+
+        //   className="absolute right-1 top-1 px-3 py-1 bg-sky-500 rounded-full transition-all hover:scale-105"
+        // >
+        //   x
+        // </div>
+      )}
       <div className="flex justify-between">
         <UserDomain domain={user.domain} />
         <GenderChip gender={user.gender} />
