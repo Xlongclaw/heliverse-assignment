@@ -6,6 +6,7 @@ import MainContainer from "./_containers/main-container";
 import NavigationBar from "@/components/NavigationBar";
 import TeamsProvider from "@/providers/teams-provider";
 import { Toaster } from "react-hot-toast";
+import { toastOptions } from "./toastOptions";
 
 export default function Page() {
   return (
@@ -15,7 +16,7 @@ export default function Page() {
           <>
             <NavigationBar />
             <MainContainer />
-            <Toaster/>
+            <Toaster toastOptions={toastOptions} />
           </>
         </TeamsProvider>
       </UsersProvider>

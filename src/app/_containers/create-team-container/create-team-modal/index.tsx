@@ -9,6 +9,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import React from "react";
+import toast from "react-hot-toast";
 
 export default function CreateTeamModal({
   visible,
@@ -36,6 +37,7 @@ export default function CreateTeamModal({
     postTeam({ members: teamMembers, teamName });
     onClose();
     resetMembers();
+    toast.success(`Created ${teamName} successfully`)
   };
 
   return (

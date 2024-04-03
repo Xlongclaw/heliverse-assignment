@@ -100,8 +100,8 @@ export default function UsersProvider({ children }: IProps) {
   };
 
   const resetMembers = () => {
-    setTeamMembers([]);
-    setDomains([])
+    setTeamMembers(()=>[]);
+    setDomains(()=>[])
   };
 
   React.useEffect(() => {

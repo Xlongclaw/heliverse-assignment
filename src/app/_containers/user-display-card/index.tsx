@@ -8,6 +8,7 @@ import UserProfileSection from "./user-profile-section";
 import { UsersContext } from "@/providers/users-provider";
 import { Button } from "@nextui-org/react";
 import cn from "@/utils/cn";
+import toast from "react-hot-toast";
 
 interface IProps {
   user: UserType;
@@ -33,12 +34,13 @@ export default function UserDisplayCard({ user }: IProps) {
         scale: !checkForDomain(user.domain) ? 0.95 : 1,
       }}
       onClick={() => {
-        if (!selected) {
+        if (!isMember(user.id)) {
           const alreadyPresent = checkForDomain(user.domain);
           if (!alreadyPresent) {
             addMember(user.id, user.domain);
             setSelected(true);
           }
+          else toast.error("Select User from different Domain")
         }
       }}
       className={cn(
