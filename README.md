@@ -1,7 +1,9 @@
 # Heliverse Internship Assignment
 
 [Vercel Deploy Link](https://heliverse-assignment-sand.vercel.app/)
+
 [Server Deploy Link](https://x-teamer-server.onrender.com)
+
 [Server Repo](https://github.com/Xlongclaw/x-teamer-server)
 
 Welcome to the Heliverse Internship Assignment project! This application is built using Next.js, React, TypeScript, Tailwind CSS, and Next UI. It is designed to fulfill the requirements of the internship assignment provided by Heliverse. Below are the key functionalities of the application:
