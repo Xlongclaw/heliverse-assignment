@@ -31,7 +31,7 @@ export default function TeamsProvider({ children }: IProps) {
 
   React.useEffect(() => {
     fetchAllTeams().then((data) => setTeams(data));
-  }, []);
+  }, [teams]);
 
   const postTeam = (
     data: { teamName: string; members: Array<number> }
@@ -43,6 +43,7 @@ export default function TeamsProvider({ children }: IProps) {
       },
       body: JSON.stringify({team:data}),
     });
+    setTeams([...teams!])
   };
 
   return (
