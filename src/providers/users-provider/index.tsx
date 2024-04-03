@@ -1,52 +1,86 @@
+import React from "react";
 import { SERVER_URL } from "@/constants";
 import { UserType } from "@/types";
 import { FilterUserType } from "@/types/UserType";
-import React from "react";
 
-interface IProps {
-  children: React.JSX.Element;
+interface UsersProviderProps {
+  /**
+   * The children elements to be wrapped by the UsersProvider.
+   */
+  children: React.ReactNode;
 }
 
-interface IUsersContext {
+interface UsersContextType {
+  /**
+   * Array of users data.
+   */
   users: Array<UserType>;
+  /**
+   * Function to change the current page.
+   * @param page The page number to navigate to.
+   */
   changePage: (page: number) => void;
+  /**
+   * Function to add a member to the team.
+   * @param id The ID of the user to be added.
+   * @param domain The domain of the user to be added.
+   */
   addMember: (id: number, domain: string) => void;
+  /**
+   * Function to remove a member from the team.
+   * @param id The ID of the user to be removed.
+   * @param domain The domain of the user to be removed.
+   */
   removeMember: (id: number, domain: string) => void;
+  /**
+   * Function to reset team members.
+   */
   resetMembers: () => void;
-  checkForDomain: (domain: string) => boolean;
+  /**
+   * Function to check if a user is a member of the team.
+   * @param id The ID of the user to check.
+   * @returns A boolean indicating if the user is a team member.
+   */
   isMember: (id: number) => boolean;
+  /**
+   * Function to check if a domain is selected.
+   * @param domain The domain to check.
+   * @returns A boolean indicating if the domain is selected.
+   */
+  checkForDomain: (domain: string) => boolean;
+  /**
+   * Function to change filter options.
+   * @param data The new filter options.
+   */
   changeFilterData: (data: any) => void;
-  fetchUserById?: (is: number) => Promise<UserType>;
+  /**
+   * Function to fetch a user by ID.
+   * @param id The ID of the user to fetch.
+   * @returns A promise that resolves to the user object.
+   */
+  fetchUserById?: (id: number) => Promise<UserType>;
+  /**
+   * Object representing filter options.
+   */
   filterOptions: FilterUserType;
-  pageCount: number;
+  /**
+   * Array of team members' IDs.
+   */
   teamMembers: Array<number>;
+  /**
+   * Total number of pages for pagination.
+   */
+  pageCount: number;
 }
 
-const fetchUsers = async (page: number, filterOptions: FilterUserType) => {
-  const res = await fetch(
-    `${SERVER_URL}/api/users?page=${page}&filterOptions=${JSON.stringify(
-      filterOptions
-    )}`
-  );
-  const data = await res.json();
-  return { users: data.users, count: data.count };
-};
-
-export const UsersContext = React.createContext<IUsersContext>({
-  users: [],
-  changePage: () => {},
-  addMember: () => {},
-  removeMember: () => {},
-  checkForDomain: () => false,
-  isMember: () => false,
-  changeFilterData: () => {},
-  resetMembers: () => {},
-  filterOptions: {},
-  teamMembers: [],
-  pageCount: 0,
-});
-
-export default function UsersProvider({ children }: IProps) {
+/**
+ * Component to provide users data and related actions to its children components.
+ * 
+ * @param {UsersProviderProps} props - The props for the UsersProvider component.
+ * @returns {React.ReactElement} The UsersProvider component.
+ */
+const UsersProvider: React.FC<UsersProviderProps> = ({ children }) => {
+  // State and functions to manage users data and actions
   const [usersData, setUsersData] = React.useState<Array<UserType>>([]);
   const [page, setPage] = React.useState(1);
   const [pageCount, setPageCount] = React.useState(1);
@@ -54,63 +88,67 @@ export default function UsersProvider({ children }: IProps) {
   const [domains, setDomains] = React.useState<Array<string>>([]);
   const [filterOptions, setFilterOption] = React.useState({});
 
+  // Function to add a member to the team
   const addMember = (id: number, domain: string) => {
-    setTeamMembers((members) => {
-      return [...members, id];
-    });
+    setTeamMembers((members) => [...members, id]);
     setDomains((domains) => [...domains, domain]);
   };
 
+  // Function to remove a member from the team
   const removeMember = (id: number, domain: string) => {
-    const arr = teamMembers.filter((member) => member !== id);
-    setTeamMembers(arr);
-    const filteredDomains = domains.filter(
-      (selectedDomain) => selectedDomain !== domain
-    );
-    setDomains(filteredDomains);
+    setTeamMembers((members) => members.filter((member) => member !== id));
+    setDomains((domains) => domains.filter((selectedDomain) => selectedDomain !== domain));
   };
 
-  const isMember = (id: number) => {
-    const arr = teamMembers.filter((member) => member === id);
-    if (arr.length === 0) return false;
-    return true;
-  };
+  // Function to check if a user is a member of the team
+  const isMember = (id: number) => teamMembers.includes(id);
 
-  const checkForDomain = (domain: string) => {
-    const arr = domains.filter(
-      (selectedDomain) => selectedDomain.toLowerCase() === domain.toLowerCase()
-    );
-    if (arr.length === 0) return false;
-    return true;
-  };
+  // Function to check if a domain is selected
+  const checkForDomain = (domain: string) => domains.some(
+    (selectedDomain) => selectedDomain.toLowerCase() === domain.toLowerCase()
+  );
 
+  // Function to change the current page
   const changePage = (page: number) => {
     setPage(page);
   };
 
+  // Function to change filter options
   const changeFilterData = (data: any) => {
     const filterData = { ...filterOptions, ...data };
     setFilterOption(filterData);
   };
 
+  // Function to fetch a user by ID
   const fetchUserById = async (id: number) => {
     const res = await fetch(`${SERVER_URL}/api/users/${id}`);
     const data: { user: UserType } = await res.json();
     return data.user;
   };
 
+  // Function to reset team members
   const resetMembers = () => {
-    setTeamMembers(()=>[]);
-    setDomains(()=>[])
+    setTeamMembers([]);
+    setDomains([]);
   };
 
+  // Fetch users data based on page and filter options
   React.useEffect(() => {
+    const fetchUsers = async (page: number, filterOptions: FilterUserType) => {
+      const res = await fetch(
+        `${SERVER_URL}/api/users?page=${page}&filterOptions=${JSON.stringify(filterOptions)}`
+      );
+      const data = await res.json();
+      return { users: data.users, count: data.count };
+    };
+
     fetchUsers(page, filterOptions).then((data) => {
       setPageCount(Math.ceil(data.count / 20));
       setUsersData(data.users);
     });
   }, [page, filterOptions]);
 
+  // Provide users data and actions to children components
   return (
     <UsersContext.Provider
       value={{
@@ -131,4 +169,19 @@ export default function UsersProvider({ children }: IProps) {
       {children}
     </UsersContext.Provider>
   );
-}
+};
+
+export default UsersProvider;
+export const UsersContext = React.createContext<UsersContextType>({
+  users: [],
+  changePage: () => {},
+  addMember: () => {},
+  removeMember: () => {},
+  checkForDomain: () => false,
+  isMember: () => false,
+  changeFilterData: () => {},
+  resetMembers: () => {},
+  filterOptions: {},
+  teamMembers: [],
+  pageCount: 0,
+});

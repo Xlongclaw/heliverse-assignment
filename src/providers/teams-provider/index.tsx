@@ -1,54 +1,89 @@
-import { SERVER_URL } from "@/constants";
 import React from "react";
+import { SERVER_URL } from "@/constants";
 
-interface IProps {
-  children: React.JSX.Element;
+/**
+ * Props interface for TeamsProvider component.
+ */
+interface TeamsProviderProps {
+  /**
+   * The children elements to be wrapped by the TeamsProvider.
+   */
+  children: React.ReactNode;
 }
 
-interface ITeamsContext {
-  teams: Array<ITeam>;
-  postTeam: (data: { teamName: string; members: Array<number> }) => void;
-}
-
-interface ITeam {
+/**
+ * Interface representing the structure of a team.
+ */
+interface Team {
   teamName: string;
   members: number[];
 }
 
-const fetchAllTeams = async () => {
-  const res = await fetch(`${SERVER_URL}/api/team`);
-  const data = await res.json();
-  return data.teams;
-};
+/**
+ * Interface representing the context value for TeamsContext.
+ */
+interface TeamsContextValue {
+  /**
+   * Array of teams.
+   */
+  teams: Team[];
+  /**
+   * Function to post a new team.
+   * @param data The data of the team to be posted.
+   */
+  postTeam: (data: { teamName: string; members: number[] }) => void;
+}
 
-export const TeamsContext = React.createContext<ITeamsContext>({
-  postTeam: () => {},
-  teams: [],
-});
+/**
+ * Component providing teams data and related actions to its children components.
+ * 
+ * @param {TeamsProviderProps} props - The props for the TeamsProvider component.
+ * @returns {React.ReactElement} The TeamsProvider component.
+ */
+const TeamsProvider: React.FC<TeamsProviderProps> = ({ children }) => {
+  // State to store teams data
+  const [teams, setTeams] = React.useState<Team[]>();
 
-export default function TeamsProvider({ children }: IProps) {
-  const [teams, setTeams] = React.useState<Array<ITeam>>();
+  // Function to fetch all teams data
+  const fetchAllTeams = async () => {
+    const res = await fetch(`${SERVER_URL}/api/team`);
+    const data = await res.json();
+    return data.teams;
+  };
 
-  React.useEffect(() => {
-    fetchAllTeams().then((data) => setTeams(data));
-  }, [teams]);
-
-  const postTeam = (
-    data: { teamName: string; members: Array<number> }
-  ) => {
+  // Function to post a new team
+  const postTeam = (data: { teamName: string; members: number[] }) => {
     fetch(`${SERVER_URL}/api/team`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({team:data}),
+      body: JSON.stringify({ team: data }),
+    }).then(() => {
+      // After posting the team, fetch all teams again to update the list
+      fetchAllTeams().then((data) => setTeams(data));
     });
-    setTeams([...teams!])
   };
 
+  // Fetch all teams data on component mount
+  React.useEffect(() => {
+    fetchAllTeams().then((data) => setTeams(data));
+  }, []);
+
+  // Provide teams data and actions to children components
   return (
     <TeamsContext.Provider value={{ teams: teams!, postTeam }}>
       {teams && children}
     </TeamsContext.Provider>
   );
-}
+};
+
+/**
+ * Context for teams data and related actions.
+ */
+export const TeamsContext = React.createContext<TeamsContextValue>({
+  teams: [],
+  postTeam: () => {},
+});
+
+export default TeamsProvider;
