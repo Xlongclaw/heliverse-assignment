@@ -1,24 +1,28 @@
-import { Chip } from "@nextui-org/react";
 import React from "react";
+import { Chip } from "@nextui-org/react";
 
-interface IProps {
+interface GenderChipProps {
+  /**
+   * The gender to display.
+   */
   gender: string;
 }
 
-export default function GenderChip({ gender }: IProps) {
+/**
+ * Component representing a chip displaying the gender.
+ * 
+ * @param {GenderChipProps} props - The props for the GenderChip component.
+ * @returns {React.ReactElement} The GenderChip component.
+ */
+const GenderChip: React.FC<GenderChipProps> = ({ gender }) => {
   return (
     <Chip
       variant={"bordered"}
       size="sm"
-      // color={
-      //   gender === "Male"
-      //     ? "success"
-      //     : gender === "Female"
-      //     ? "danger"
-      //     : "warning"
-      // }
     >
       {gender}
     </Chip>
   );
-}
+};
+
+export default GenderChip;

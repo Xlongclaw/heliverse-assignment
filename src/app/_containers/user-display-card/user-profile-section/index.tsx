@@ -1,24 +1,39 @@
-import { Avatar } from "@nextui-org/react";
 import React from "react";
+import { Avatar } from "@nextui-org/react";
 
-interface IProps {
+interface UserProfileSectionProps {
+  /**
+   * Indicates if the user is available.
+   */
   available: boolean;
+  /**
+   * The first name of the user.
+   */
   first_name: string;
+  /**
+   * The last name of the user.
+   */
   last_name: string;
+  /**
+   * The email of the user.
+   */
   email: string;
-  avatar:string
+  /**
+   * The URL of the user's avatar.
+   */
+  avatar: string;
 }
 
-export default function UserProfileSection(props: IProps) {
+/**
+ * Component representing the user profile section.
+ * 
+ * @param {UserProfileSectionProps} props - The props for the UserProfileSection component.
+ * @returns {React.ReactElement} The UserProfileSection component.
+ */
+const UserProfileSection: React.FC<UserProfileSectionProps> = (props) => {
   return (
     <div className="flex gap-4 pb-3 items-center">
-      {/* <Image
-          className="w-10 h-10"
-          width={1000}
-          height={1000}
-          alt=""
-          src={"https://i.pravatar.cc/150?u=a04258114e29026708c"}
-        /> */}
+      {/* User avatar */}
       <Avatar
         src={props.avatar}
         radius="md"
@@ -26,6 +41,7 @@ export default function UserProfileSection(props: IProps) {
         color={props.available ? "primary" : "default"}
         isBordered
       />
+      {/* User name and email */}
       <div className="">
         <h4 className="font-semibold">
           {props.first_name} {props.last_name}
@@ -34,4 +50,6 @@ export default function UserProfileSection(props: IProps) {
       </div>
     </div>
   );
-}
+};
+
+export default UserProfileSection;

@@ -1,25 +1,36 @@
-import { UserType } from "@/types";
-import classnames from "classnames";
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import GenderChip from "./gender-chip";
-import UserDomain from "./user-domain";
-import UserProfileSection from "./user-profile-section";
-import { UsersContext } from "@/providers/users-provider";
 import { Button } from "@nextui-org/react";
-import cn from "@/utils/cn";
 import toast from "react-hot-toast";
+import { UserType } from "@/types";
+import UserProfileSection from "./user-profile-section";
+import UserDomain from "./user-domain";
+import GenderChip from "./gender-chip";
+import { UsersContext } from "@/providers/users-provider";
+import cn from "@/utils/cn";
 
-interface IProps {
+interface UserDisplayCardProps {
+  /**
+   * The user data to display.
+   */
   user: UserType;
 }
 
-export default function UserDisplayCard({ user }: IProps) {
-  const { addMember, removeMember, checkForDomain, isMember } =
-    React.useContext(UsersContext);
-  const [selected, setSelected] = React.useState(isMember(user.id));
+/**
+ * Component representing a card displaying user information.
+ * 
+ * @param {UserDisplayCardProps} props - The props for the UserDisplayCard component.
+ * @returns {React.ReactElement} The UserDisplayCard component.
+ */
+const UserDisplayCard: React.FC<UserDisplayCardProps> = ({ user }) => {
+  // Context for managing users
+  const { addMember, removeMember, checkForDomain, isMember } = useContext(UsersContext);
+  // State to track if the user is selected
+  const [selected, setSelected] = useState<boolean>(isMember(user.id));
 
-  React.useEffect(() => {}, [selected]);
+  useEffect(() => {
+    // Empty effect, just to satisfy useEffect dependencies
+  }, [selected]);
 
   return (
     <motion.div
@@ -34,17 +45,19 @@ export default function UserDisplayCard({ user }: IProps) {
         scale: !checkForDomain(user.domain) ? 0.95 : 1,
       }}
       onClick={() => {
+        // Add user to the team if not already a member and not from the same domain
         if (!isMember(user.id)) {
           const alreadyPresent = checkForDomain(user.domain);
           if (!alreadyPresent) {
             addMember(user.id, user.domain);
             setSelected(true);
+          } else {
+            toast.error("Select User from different Domain");
           }
-          else toast.error("Select User from different Domain")
         }
       }}
       className={cn(
-        "dark:bg-zinc-950 shadow-x1 rounded-lg p-4 dark:border-2 border-zinc-900 relative  cursor-pointer opacity-0",
+        "dark:bg-zinc-950 shadow-x1 rounded-lg p-4 dark:border-2 border-zinc-900 relative cursor-pointer opacity-0",
         {
           "border-sky-500 ": isMember(user.id),
           "dark:bg-zinc-800 bg-zinc-200": checkForDomain(user.domain),
@@ -52,6 +65,7 @@ export default function UserDisplayCard({ user }: IProps) {
         }
       )}
     >
+      {/* Display user profile section */}
       <UserProfileSection
         available={user.available}
         email={user.email}
@@ -59,6 +73,7 @@ export default function UserDisplayCard({ user }: IProps) {
         last_name={user.last_name}
         avatar={user.avatar}
       />
+      {/* Remove button if the user is already a member */}
       {isMember(user.id) && (
         <Button
           onClick={() => {
@@ -72,10 +87,13 @@ export default function UserDisplayCard({ user }: IProps) {
           X
         </Button>
       )}
+      {/* Display user domain and gender */}
       <div className="flex justify-between">
         <UserDomain domain={user.domain} />
         <GenderChip gender={user.gender} />
       </div>
     </motion.div>
   );
-}
+};
+
+export default UserDisplayCard;

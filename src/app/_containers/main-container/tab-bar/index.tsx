@@ -1,14 +1,26 @@
-import { Tabs, Tab } from "@nextui-org/react";
 import React from "react";
+import { Tabs, Tab } from "@nextui-org/react";
 import PlusIcon from "../PlusIcon";
 import TeamIcon from "../TeamIcon";
 
-interface IProps {
-  selected: any;
+interface TabBarProps {
+  /**
+   * The key of the currently selected tab.
+   */
+  selected: string;
+  /**
+   * Function to set the selected tab.
+   */
   setSelected: any;
 }
 
-export default function TabBar({ selected, setSelected }: IProps) {
+/**
+ * Component representing the tab bar for selecting different views.
+ *
+ * @param {TabBarProps} props - The props for the TabBar component.
+ * @returns {React.ReactElement} The TabBar component.
+ */
+const TabBar: React.FC<TabBarProps> = ({ selected, setSelected }) => {
   return (
     <Tabs
       selectedKey={selected}
@@ -16,6 +28,7 @@ export default function TabBar({ selected, setSelected }: IProps) {
       size={"lg"}
       aria-label="Tabs sizes"
     >
+      {/* Tab for creating a team */}
       <Tab
         key="CREATE_TEAM"
         title={
@@ -25,6 +38,7 @@ export default function TabBar({ selected, setSelected }: IProps) {
           </div>
         }
       />
+      {/* Tab for viewing teams */}
       <Tab
         key="VIEW_TEAMS"
         title={
@@ -36,4 +50,6 @@ export default function TabBar({ selected, setSelected }: IProps) {
       />
     </Tabs>
   );
-}
+};
+
+export default TabBar;
