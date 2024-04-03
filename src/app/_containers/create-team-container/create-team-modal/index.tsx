@@ -1,5 +1,4 @@
-import { TeamsContext } from "@/providers/teams-provider";
-import { UsersContext } from "@/providers/users-provider";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Button,
   Input,
@@ -8,44 +7,54 @@ import {
   ModalContent,
   useDisclosure,
 } from "@nextui-org/react";
-import React from "react";
 import toast from "react-hot-toast";
+import { TeamsContext } from "@/providers/teams-provider";
+import { UsersContext } from "@/providers/users-provider";
 
-export default function CreateTeamModal({
+/**
+ * Component representing a modal for creating a new team.
+ * 
+ * @param {object} props - Props for the CreateTeamModal component.
+ * @param {boolean} props.visible - Flag indicating whether the modal is visible.
+ * @param {Function} props.closeModal - Function to close the modal.
+ * @returns {React.ReactElement} The CreateTeamModal component.
+ */
+const CreateTeamModal: React.FC<{ visible: boolean; closeModal: () => void }> = ({
   visible,
   closeModal,
-}: {
-  visible: boolean;
-  closeModal: () => void;
-}) {
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { teamMembers, resetMembers } = React.useContext(UsersContext);
-  const { postTeam } = React.useContext(TeamsContext);
+  const { teamMembers, resetMembers } = useContext(UsersContext);
+  const { postTeam } = useContext(TeamsContext);
 
-  const [teamName, setTeamName] = React.useState<string>("");
+  const [teamName, setTeamName] = useState<string>("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     visible ? onOpen() : onClose();
   }, [visible]);
 
+  /**
+   * Handles the closing of the modal.
+   */
   const handleModalClose = () => {
     closeModal();
     onClose();
   };
 
+  /**
+   * Handles the creation of a new team.
+   */
   const handleCreateTeam = () => {
     postTeam({ members: teamMembers, teamName });
     onClose();
     resetMembers();
-    toast.success(`Created ${teamName} successfully`)
+    toast.success(`Created ${teamName} successfully`);
   };
 
   return (
     <Modal
       size={"md"}
       className="bg-zinc-950"
-      // hideCloseButton
-      backdrop="blur"
       isOpen={isOpen}
       onClose={handleModalClose}
     >
@@ -70,4 +79,6 @@ export default function CreateTeamModal({
       </ModalContent>
     </Modal>
   );
-}
+};
+
+export default CreateTeamModal;
