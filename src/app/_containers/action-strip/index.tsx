@@ -6,7 +6,7 @@ import React from "react";
 export default function ActionStrip() {
   const { teamMembers } = React.useContext(UsersContext);
   return (
-    <div className="px-[9rem] h-20 flex items-center gap-4 justify-between">
+    <div className=" h-20 flex items-center gap-4 justify-between">
       <Chip size="lg" color="default">
         Selected Users : {teamMembers.length}
       </Chip>

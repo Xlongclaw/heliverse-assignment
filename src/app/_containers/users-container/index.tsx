@@ -16,7 +16,7 @@ export default function UsersContainer() {
 
 
   return (
-    <section className="px-[9rem] ">
+    <section className=" ">
       <motion.div className="grid grid-cols-4 gap-2">
         {users.map((user) => (
           <UserDisplayCard
