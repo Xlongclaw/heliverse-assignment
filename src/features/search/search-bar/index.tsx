@@ -2,9 +2,14 @@ import { Kbd } from "@nextui-org/react";
 import React from "react";
 import SearchIcon from "./SearchIcon";
 import SearchModal from "./SearchModal";
+import { UsersContext } from "@/providers/users-provider";
 
 export default function SearchBar() {
   const [modalVisibility, setModalVisibility] = React.useState(false);
+
+  const {changeFilterData} = React.useContext(UsersContext)
+
+
   const openModal = () => {
     setModalVisibility(true);
   };
@@ -20,9 +25,10 @@ export default function SearchBar() {
     text-default-500 flex items-center gap-2 border border-default-100 hover:border-primary-100 cursor-pointer transition-colors"
     >
       <SearchIcon />
-      <p>Search Users</p>
+      <input className="bg-transparent focus:outline-none" onChange={(e)=>changeFilterData({first_name:e.target.value})} type="text" placeholder="Search Users" />
+      {/* <p>Search Users</p> */}
       <Kbd keys={["command"]}>P</Kbd>
-      <SearchModal visible={modalVisibility} closeModal={closeModal} />
+      {/* <SearchModal visible={modalVisibility} closeModal={closeModal} /> */}
     </button>
   );
 }

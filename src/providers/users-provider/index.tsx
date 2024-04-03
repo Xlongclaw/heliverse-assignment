@@ -1,5 +1,6 @@
 import { SERVER_URL } from "@/constants";
 import { UserType } from "@/types";
+import { FilterUserType } from "@/types/UserType";
 import React from "react";
 
 interface IProps {
@@ -13,20 +14,29 @@ interface IUsersContext {
   removeMember: (id: number, domain: string) => void;
   checkForDomain: (domain: string) => boolean;
   isMember: (id: number) => boolean;
+  changeFilterData: (data: any) => void;
+  filterOptions: FilterUserType;
   pageCount: number;
   teamMembers: Array<number>;
 }
 
-const fetchUsers = async (page: number) => {
-  const res = await fetch(`${SERVER_URL}/api/users?page=${page}`);
-  const data = await res.json();
-  return { users: data.users, count: data.count };
-};
-
-const fetchUserById = async (id: number) => {
-  const res = await fetch(`${SERVER_URL}/api/users/${id}`);
-  const data = await res.json();
-  return data.user;
+const fetchUsers = async (page: number, filterOptions: FilterUserType) => {
+  if (Object.keys(filterOptions).length === 0 || filterOptions.first_name=="") {
+    console.log("1");
+    
+    const res = await fetch(
+      `${SERVER_URL}/api/users?page=${page}`
+      );
+      const data = await res.json();
+      return { users: data.users, count: data.count };
+    } else {
+    console.log("2");
+    const res = await fetch(
+      `${SERVER_URL}/api/users?page=${page}&filterOptions=${JSON.stringify(filterOptions)}`
+    );
+    const data = await res.json();
+    return { users: data.users, count: data.count };
+  }
 };
 
 export const UsersContext = React.createContext<IUsersContext>({
@@ -34,8 +44,10 @@ export const UsersContext = React.createContext<IUsersContext>({
   changePage: () => {},
   addMember: () => {},
   removeMember: () => {},
-  checkForDomain:()=>false,
-  isMember:()=>false,
+  checkForDomain: () => false,
+  isMember: () => false,
+  changeFilterData: () => {},
+  filterOptions: {},
   teamMembers: [],
   pageCount: 0,
 });
@@ -46,6 +58,11 @@ export default function UsersProvider({ children }: IProps) {
   const [pageCount, setPageCount] = React.useState(1);
   const [teamMembers, setTeamMembers] = React.useState<Array<number>>([]);
   const [domains, setDomains] = React.useState<Array<string>>([]);
+  const [filterOptions, setFilterOption] = React.useState({});
+
+  React.useEffect(() => {
+    console.log(filterOptions);
+  }, [filterOptions]);
 
   const addMember = (id: number, domain: string) => {
     setTeamMembers((members) => {
@@ -63,29 +80,36 @@ export default function UsersProvider({ children }: IProps) {
     setDomains(filteredDomains);
   };
 
-  const isMember = (id:number) =>{
-    const arr = teamMembers.filter((member)=>member === id)
-    if(arr.length === 0) return false
-   return true
-  }
+  const isMember = (id: number) => {
+    const arr = teamMembers.filter((member) => member === id);
+    if (arr.length === 0) return false;
+    return true;
+  };
 
-  const checkForDomain = (domain:string) =>{
-    const arr = domains.filter((selectedDomain)=>selectedDomain.toLowerCase() === domain.toLowerCase())
+  const checkForDomain = (domain: string) => {
+    const arr = domains.filter(
+      (selectedDomain) => selectedDomain.toLowerCase() === domain.toLowerCase()
+    );
     console.log(arr);
-    if(arr.length === 0) return false
-    return true
-  }
+    if (arr.length === 0) return false;
+    return true;
+  };
 
   const changePage = (page: number) => {
     setPage(page);
   };
 
+  const changeFilterData = (data: any) => {
+    const filterData = { ...filterOptions, ...data };
+    setFilterOption(filterData);
+  };
+
   React.useEffect(() => {
-    fetchUsers(page).then((data) => {
+    fetchUsers(page, filterOptions).then((data) => {
       setPageCount(data.count / 20);
       setUsersData(data.users);
     });
-  }, [page]);
+  }, [page,filterOptions]);
 
   return (
     <UsersContext.Provider
@@ -97,7 +121,9 @@ export default function UsersProvider({ children }: IProps) {
         removeMember,
         teamMembers,
         checkForDomain,
-        isMember
+        isMember,
+        filterOptions,
+        changeFilterData,
       }}
     >
       {children}

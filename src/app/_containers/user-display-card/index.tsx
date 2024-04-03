@@ -7,6 +7,7 @@ import UserDomain from "./user-domain";
 import UserProfileSection from "./user-profile-section";
 import { UsersContext } from "@/providers/users-provider";
 import { Button } from "@nextui-org/react";
+import cn from "@/utils/cn";
 
 interface IProps {
   user: UserType;
@@ -40,12 +41,12 @@ export default function UserDisplayCard({ user }: IProps) {
           }
         }
       }}
-      className={classnames(
+      className={cn(
         "bg-zinc-950 rounded-lg p-4 border-2 border-zinc-900 relative  cursor-pointer opacity-0",
         {
-          "border-sky-600 ": selected,
+          "border-sky-500 ": selected,
           "bg-zinc-800 ": checkForDomain(user.domain),
-          "hover:bg-zinc-900": !checkForDomain(user.domain),
+          "hover:bg-zinc-900 ": !checkForDomain(user.domain),
         }
       )}
     >
@@ -68,12 +69,6 @@ export default function UserDisplayCard({ user }: IProps) {
         >
           X
         </Button>
-        // <div
-
-        //   className="absolute right-1 top-1 px-3 py-1 bg-sky-500 rounded-full transition-all hover:scale-105"
-        // >
-        //   x
-        // </div>
       )}
       <div className="flex justify-between">
         <UserDomain domain={user.domain} />
