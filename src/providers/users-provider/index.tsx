@@ -15,24 +15,28 @@ interface IUsersContext {
   checkForDomain: (domain: string) => boolean;
   isMember: (id: number) => boolean;
   changeFilterData: (data: any) => void;
+  fetchUserById?: (is: number) => Promise<UserType>;
   filterOptions: FilterUserType;
   pageCount: number;
   teamMembers: Array<number>;
 }
 
 const fetchUsers = async (page: number, filterOptions: FilterUserType) => {
-  if (Object.keys(filterOptions).length === 0 || filterOptions.first_name=="") {
+  if (
+    Object.keys(filterOptions).length === 0 ||
+    filterOptions.first_name == ""
+  ) {
     console.log("1");
-    
-    const res = await fetch(
-      `${SERVER_URL}/api/users?page=${page}`
-      );
-      const data = await res.json();
-      return { users: data.users, count: data.count };
-    } else {
+
+    const res = await fetch(`${SERVER_URL}/api/users?page=${page}`);
+    const data = await res.json();
+    return { users: data.users, count: data.count };
+  } else {
     console.log("2");
     const res = await fetch(
-      `${SERVER_URL}/api/users?page=${page}&filterOptions=${JSON.stringify(filterOptions)}`
+      `${SERVER_URL}/api/users?page=${page}&filterOptions=${JSON.stringify(
+        filterOptions
+      )}`
     );
     const data = await res.json();
     return { users: data.users, count: data.count };
@@ -102,6 +106,14 @@ export default function UsersProvider({ children }: IProps) {
   const changeFilterData = (data: any) => {
     const filterData = { ...filterOptions, ...data };
     setFilterOption(filterData);
+    console.log(data);
+    
+  };
+
+  const fetchUserById = async (id: number) => {
+    const res = await fetch(`${SERVER_URL}/api/users/${id}`);
+    const data: { user: UserType } = await res.json();
+    return data.user;
   };
 
   React.useEffect(() => {
@@ -109,7 +121,7 @@ export default function UsersProvider({ children }: IProps) {
       setPageCount(Math.ceil(data.count / 20));
       setUsersData(data.users);
     });
-  }, [page,filterOptions]);
+  }, [page, filterOptions]);
 
   return (
     <UsersContext.Provider
@@ -124,6 +136,7 @@ export default function UsersProvider({ children }: IProps) {
         isMember,
         filterOptions,
         changeFilterData,
+        fetchUserById,
       }}
     >
       {children}
