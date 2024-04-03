@@ -44,7 +44,7 @@ export default function UserDisplayCard({ user }: IProps) {
       className={cn(
         "dark:bg-zinc-950 shadow-x1 rounded-lg p-4 dark:border-2 border-zinc-900 relative  cursor-pointer opacity-0",
         {
-          "border-sky-500 ": selected,
+          "border-sky-500 ": isMember(user.id),
           "dark:bg-zinc-800 bg-zinc-200": checkForDomain(user.domain),
           "dark:hover:bg-zinc-900 hover:bg-zinc-100": !checkForDomain(user.domain),
         }
@@ -57,7 +57,7 @@ export default function UserDisplayCard({ user }: IProps) {
         last_name={user.last_name}
         avatar={user.avatar}
       />
-      {selected && (
+      {isMember(user.id) && (
         <Button
           onClick={() => {
             setSelected(false);

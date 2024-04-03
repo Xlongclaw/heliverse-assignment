@@ -1,13 +1,11 @@
 import {
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
 } from "@nextui-org/react";
 import React from "react";
 import TeamerLogo from "../TeamerLogo";
-import { LOGO_TITLE, NAV_LINKS } from "./constants";
+import { LOGO_TITLE} from "./constants";
 import UserSection from "./UserSection";
 import { SearchBar } from "@/features/search";
 
@@ -18,22 +16,10 @@ export default function NavigationBar() {
         <TeamerLogo />
         <h1 className="font-bold text-inherit">{LOGO_TITLE}</h1>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        {/* {NAV_LINKS.map((LINK) => (
-          <NavbarItem key={LINK.title} isActive={LINK.isActive}>
-            <Link
-              color={LINK.isActive ? "primary" : "foreground"}
-              href={LINK.href}
-              aria-current="page"
-            >
-              {LINK.title}
-            </Link>
-          </NavbarItem>
-        ))} */}
-      </NavbarContent>
-
       <NavbarContent justify="end">
-        <SearchBar />
+        <div className="hidden sm:flex">
+          <SearchBar />
+        </div>
         <UserSection />
       </NavbarContent>
     </Navbar>

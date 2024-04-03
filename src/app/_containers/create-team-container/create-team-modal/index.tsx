@@ -18,7 +18,7 @@ export default function CreateTeamModal({
   closeModal: () => void;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { teamMembers } = React.useContext(UsersContext);
+  const { teamMembers, resetMembers } = React.useContext(UsersContext);
   const { postTeam } = React.useContext(TeamsContext);
 
   const [teamName, setTeamName] = React.useState<string>("");
@@ -34,6 +34,8 @@ export default function CreateTeamModal({
 
   const handleCreateTeam = () => {
     postTeam({ members: teamMembers, teamName });
+    onClose();
+    resetMembers();
   };
 
   return (

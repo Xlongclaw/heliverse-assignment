@@ -12,6 +12,7 @@ interface IUsersContext {
   changePage: (page: number) => void;
   addMember: (id: number, domain: string) => void;
   removeMember: (id: number, domain: string) => void;
+  resetMembers: () => void;
   checkForDomain: (domain: string) => boolean;
   isMember: (id: number) => boolean;
   changeFilterData: (data: any) => void;
@@ -22,25 +23,13 @@ interface IUsersContext {
 }
 
 const fetchUsers = async (page: number, filterOptions: FilterUserType) => {
-  if (
-    Object.keys(filterOptions).length === 0 ||
-    filterOptions.first_name == ""
-  ) {
-    console.log("1");
-
-    const res = await fetch(`${SERVER_URL}/api/users?page=${page}`);
-    const data = await res.json();
-    return { users: data.users, count: data.count };
-  } else {
-    console.log("2");
-    const res = await fetch(
-      `${SERVER_URL}/api/users?page=${page}&filterOptions=${JSON.stringify(
-        filterOptions
-      )}`
-    );
-    const data = await res.json();
-    return { users: data.users, count: data.count };
-  }
+  const res = await fetch(
+    `${SERVER_URL}/api/users?page=${page}&filterOptions=${JSON.stringify(
+      filterOptions
+    )}`
+  );
+  const data = await res.json();
+  return { users: data.users, count: data.count };
 };
 
 export const UsersContext = React.createContext<IUsersContext>({
@@ -51,6 +40,7 @@ export const UsersContext = React.createContext<IUsersContext>({
   checkForDomain: () => false,
   isMember: () => false,
   changeFilterData: () => {},
+  resetMembers: () => {},
   filterOptions: {},
   teamMembers: [],
   pageCount: 0,
@@ -107,13 +97,17 @@ export default function UsersProvider({ children }: IProps) {
     const filterData = { ...filterOptions, ...data };
     setFilterOption(filterData);
     console.log(data);
-    
   };
 
   const fetchUserById = async (id: number) => {
     const res = await fetch(`${SERVER_URL}/api/users/${id}`);
     const data: { user: UserType } = await res.json();
     return data.user;
+  };
+
+  const resetMembers = () => {
+    setTeamMembers([]);
+    setDomains([])
   };
 
   React.useEffect(() => {
@@ -137,6 +131,7 @@ export default function UsersProvider({ children }: IProps) {
         filterOptions,
         changeFilterData,
         fetchUserById,
+        resetMembers
       }}
     >
       {children}
