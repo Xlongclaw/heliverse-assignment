@@ -106,7 +106,7 @@ export default function UsersProvider({ children }: IProps) {
 
   React.useEffect(() => {
     fetchUsers(page, filterOptions).then((data) => {
-      setPageCount(data.count / 20);
+      setPageCount(Math.ceil(data.count / 20));
       setUsersData(data.users);
     });
   }, [page,filterOptions]);
