@@ -42,11 +42,11 @@ export default function UserDisplayCard({ user }: IProps) {
         }
       }}
       className={cn(
-        "bg-zinc-950 rounded-lg p-4 border-2 border-zinc-900 relative  cursor-pointer opacity-0",
+        "dark:bg-zinc-950 shadow-x1 rounded-lg p-4 dark:border-2 border-zinc-900 relative  cursor-pointer opacity-0",
         {
           "border-sky-500 ": selected,
-          "bg-zinc-800 ": checkForDomain(user.domain),
-          "hover:bg-zinc-900 ": !checkForDomain(user.domain),
+          "dark:bg-zinc-800 bg-zinc-200": checkForDomain(user.domain),
+          "dark:hover:bg-zinc-900 hover:bg-zinc-100": !checkForDomain(user.domain),
         }
       )}
     >

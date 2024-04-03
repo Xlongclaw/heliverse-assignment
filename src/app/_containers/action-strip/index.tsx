@@ -1,6 +1,6 @@
 import AutoComplete from "@/components/AutoComplete";
 import { UsersContext } from "@/providers/users-provider";
-import { Chip, Tooltip } from "@nextui-org/react";
+import { Button, Chip, Tooltip } from "@nextui-org/react";
 import React from "react";
 
 export default function ActionStrip() {
@@ -11,8 +11,11 @@ export default function ActionStrip() {
         Selected Users : {teamMembers.length}
       </Chip>
       <div className="flex gap-4">
-        <Tooltip content="Create your team" placement="left">
-          <button className="bg-primary-300 px-4 rounded-xl"> Create</button>
+        <Tooltip content="Create your team" placement="bottom">
+          <Button className="bg-primary-300 px-4 rounded-xl"> Create</Button>
+        </Tooltip>
+        <Tooltip content="Remove all selected members" placement="top">
+          <Button className="bg-primary-300 px-4 rounded-xl"> Reset</Button>
         </Tooltip>
         <AutoComplete
           placeholder="Select a domain"
